@@ -1,5 +1,5 @@
-import OOP_start
+import OOP_pamati as fails
 
-Kaija = Putns("Balta","Pie jūras",True)
+Kaija = fails.Putns("Balta","Pie jūras",True)
 
 print(Kaija.krasa)
