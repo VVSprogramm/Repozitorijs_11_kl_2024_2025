@@ -16,11 +16,18 @@ class Transportlidzeklis():
         self.brauksanas_atrums = brauksanas_atrums
         self.vietu_skaits = vietu_skaits
 
-    def dati(self):
-        pass
+
+#Objekta izveide
+#1.objekta nosaukums
+#2.pasaukt klasi
+#3.definēt nepieciešamās īpašības
 
 bmw = Transportlidzeklis("Sarkana",4,240,5)
-print(bmw.riepu_skaits)
+
+print(bmw.brauksanas_atrums)
+
+# bmw = Transportlidzeklis("Sarkana",4,240,5)
+# print(bmw.riepu_skaits)
 
 
 #1.uzd.
@@ -32,7 +39,7 @@ class Putns():
     def __init__(self,krasa,vide,lido):
         self.krasa = krasa
         self.vide = vide
-        self.lido = bool(lido)
+        self.lido = bool(lido) #bool() pārveido mainīgo uz datu tipu boolean (true,false)
 
 
 #2.uzd.
