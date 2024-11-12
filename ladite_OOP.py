@@ -1,27 +1,5 @@
-print("Sveicināti! Šī programma izveido rēķinus koka lādīšu pasūtījumiem.")
-
-klients = input("Ievadiet klienta vārdu: ")
-veltijums = input("Ievadiet veltījuma tekstu: ")
-
-platums = int(input("Ievadiet lādītes platumu (mm): "))
-garums = int(input("Ievadiet lādītes garumu (mm): "))
-augstums = int(input("Ievadiet lādītes augstumu (mm): "))
-
-materiala_cena = float(input("Ievadiet kokmateriāla cenu (EUR/m2): "))
-
-
-darba_samaksa = 15
-PVN = 21
-veltijuma_garums = len(veltijums)
-
-produkta_cena = (veltijuma_garums * 1.2) + ((platums * garums * augstums) / 100 ) / 3 *materiala_cena
-PVN_summa = (produkta_cena + darba_samaksa) * PVN / 100
-rekina_summa = (produkta_cena + darba_samaksa) + PVN_summa
-
-print(produkta_cena)
-print(rekina_summa)
-
-
+import csv
+import datetime
 """
 Izveido klasi Rekins, kas saņem 4 parametrus un izveido attiecīgas īpašības ar dotajiem lielumiem:
 ● klients (simbolu virkne);
@@ -36,22 +14,56 @@ class Rekins():
         self.veltijums = veltijums
         self.izmers = izmers
         self.materials = materials
+        self.laiks = datetime.datetime.now()
 
-"""
-Klasei Rekins pievieno metodi izdrukat(), kas izvada uz ekrāna glīti noformētu
-informāciju parrēķinu!
+    """
+    Klasei Rekins pievieno metodi izdrukat(), kas izvada uz ekrāna glīti noformētu
+    informāciju par rēķinu!
+    """
 
-Klasei Rekins pievieno metodi aprekins(), kas pēc dotās formulas un rēķina īpašībām
-aprēķinaapmaksājamo summu! Metodi aprekins() izsauc, inicializējot objektu!
+    """
+    Uzlabo klases Rekins metodi izdrukat(), lai tā drukātu arī aprēķināto apmaksas summu no
+    metodes aprekins()!
+    """
 
-Uzlabo klases Rekins metodi izdrukat(), lai tā drukātu arī aprēķināto apmaksas summu no
-metodes aprekins()!
+    """
+    Papildini programmu, lai tā izsauc metodi saglabat() pirms rēķina izdrukāšanas!
+    """
+    def izdrukat(self):
+        #self.saglabat()
+        print("klienta vārds:",self.klients)
+        print("veltijums:",self.veltijums)
+        print("izmērs(platums, garums. augstums):",self.izmers)
+        print("materiāla cena m2:",self.materials)
+        print("Rekina summa:",self.aprekins())
+        print("Laiks:",self.laiks)
 
-Izveido programmu, kas izdrukā informatīvu tekstu, pieprasa lietotāja ievadītus datus,
-izveido jaunu objektu no datiem un klases Rekins un tad izmanto objekta metodi
-izdrukat(), lai izvadīturēķinu uz ekrāna!
+    """
+    Klasei Rekins pievieno metodi aprekins(), kas pēc dotās formulas un rēķina īpašībām
+    aprēķina apmaksājamo summu! Metodi aprekins() izsauc, inicializējot objektu!
+    """
+    def aprekins(self):
+        darba_samaksa = 15
+        PVN = 21
+        veltijuma_garums = len(self.veltijums)
 
-Papildini klasi Rekins ar metodi saglabat(), kas saglabā rēķina datus CSV datnē, kuras
-nosaukumsveidots no klienta vārda un datuma!
+        produkta_cena = (veltijuma_garums * 1.2) + ((self.izmers[0] * self.izmers[1] * self.izmers[2]) / 100 ) / 3 *self.materials
+        PVN_summa = (produkta_cena + darba_samaksa) * PVN / 100
+        rekina_summa = (produkta_cena + darba_samaksa) + PVN_summa
+        
+        return rekina_summa
 
-Papildini programmu, lai tā izsauc metodi saglabat() pirms rēķina izdrukāšanas!"""
+    """
+    Papildini klasi Rekins ar metodi saglabat(), kas saglabā rēķina datus CSV datnē, kuras
+    nosaukumsveidots no klienta vārda un datuma!
+    """
+
+    def saglabat(self):
+        kolonnuNosaukumi = ['Vārds','Vēltījums','Izmēri','Materiāla_cena','rekina_summa','laiks']
+
+        saturs = [self.klients,self.veltijums,self.izmers,self.materials,self.aprekins(),self.laiks]
+
+        with open("csv_rekins.csv","a", encoding="UTF-8") as fails:
+            csvwrite = csv.writer(fails) #Objekta izveide
+            csvwrite.writerow(kolonnuNosaukumi)
+            csvwrite.writerow(saturs)
